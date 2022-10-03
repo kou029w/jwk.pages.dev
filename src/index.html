@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>JSON Web Key Generator</title>
+    <script type="module" src="/main.js"></script>
+    <link rel="stylesheet" href="/main.css" />
+  </head>
+  <body>
+    <header>
+      <h1>JSON Web Key Generator</h1>
+      <p>Generate JSON Web Key.</p>
+    </header>
+    <main>
+      <form>
+        <label style="display: block">
+          Algorithm
+          <select name="alg">
+            <!-- https://www.iana.org/assignments/jose/web-signature-encryption-algorithms.csv -->
+            <option>ES256</option>
+            <option>ES384</option>
+            <option>ES512</option>
+            <option>RS256</option>
+            <option>RS384</option>
+            <option>RS512</option>
+            <option>PS256</option>
+            <option>PS384</option>
+            <option>PS512</option>
+            <option>RSA-OAEP</option>
+            <option>RSA-OAEP-256</option>
+            <option>RSA-OAEP-384</option>
+            <option>RSA-OAEP-512</option>
+            <option>ECDH-ES</option>
+            <option>ECDH-ES+A128KW</option>
+            <option>ECDH-ES+A192KW</option>
+            <option>ECDH-ES+A256KW</option>
+          </select>
+        </label>
+        <input type="submit" value="Generate" style="display: block" />
+      </form>
+      <pre id="output"></pre>
+    </main>
+    <footer>
+      by <a href="https://github.com/kou029w" rel="noreferrer">kou029w</a>
+    </footer>
+  </body>
+</html>

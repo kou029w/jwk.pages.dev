@@ -1,0 +1,16 @@
+{
+  "name": "jwk.pages.dev",
+  "version": "0.0.0",
+  "private": true,
+  "author": "Kohei Watanabe <kou029w@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "build": "esbuild --bundle --loader:.html=copy --outdir=dist src/*",
+    "start": "esbuild --bundle --loader:.html=copy --servedir=src src/*"
+  },
+  "devDependencies": {
+    "@exampledev/new.css": "^1.1.3",
+    "esbuild": "^0.15.9",
+    "jose": "^4.10.0"
+  }
+}
