@@ -40,8 +40,8 @@
         <label style="display: block">
           Public Key Use
           <select name="use">
-            <option value="sig">signature</option>
-            <option value="enc">encryption</option>
+            <option value="sig">Signature</option>
+            <option value="enc">Encryption</option>
             <option value="">-</option>
           </select>
         </label>
@@ -60,7 +60,14 @@
         </label>
         <input type="submit" value="Generate" style="display: block" />
       </form>
-      <pre id="output"></pre>
+      <label>
+        Private Key
+        <pre id="private"></pre>
+      </label>
+      <label>
+        Public Key
+        <pre id="public"></pre>
+      </label>
     </main>
     <footer>
       by <a href="https://github.com/kou029w/" rel="noreferrer">kou029w</a>

@@ -7,14 +7,17 @@ import {
 } from "jose";
 
 const form = document.querySelector("form") as HTMLFormElement;
-const output = document.querySelector("#output") as HTMLPreElement;
+const publicKeyOutput = document.querySelector("#public") as HTMLPreElement;
+const privateKeyOutput = document.querySelector("#private") as HTMLPreElement;
 
 async function onSubmit(e: SubmitEvent) {
   e.preventDefault();
   const data = new FormData(form);
   const alg = data.get("alg") as string;
   const use = (data.get("use") as string) || undefined;
-  const { privateKey } = await generateKeyPair(alg, { extractable: true });
+  const { privateKey, publicKey } = await generateKeyPair(alg, {
+    extractable: true,
+  });
   const jwk = await exportJWK(privateKey);
   const createKid = {
     "rfc7638-s256": () => calculateJwkThumbprint(jwk, "sha256"),
@@ -25,8 +28,17 @@ async function onSubmit(e: SubmitEvent) {
     "rfc9278-s512": () => calculateJwkThumbprintUri(jwk, "sha512"),
     "date-time": () => new Date().toISOString(),
   }[data.get("kid-method") as string];
-  output.textContent = JSON.stringify(
-    { ...{ alg, use, kid: await createKid?.() }, ...jwk },
+  const kid = await createKid?.();
+  privateKeyOutput.textContent = JSON.stringify(
+    { ...{ alg, use, kid }, ...jwk },
+    null,
+    "  "
+  );
+  publicKeyOutput.textContent = JSON.stringify(
+    {
+      ...{ alg, use, kid },
+      ...(await exportJWK(publicKey)),
+    },
     null,
     "  "
   );
