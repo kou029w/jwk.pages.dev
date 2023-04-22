@@ -6,7 +6,7 @@
   "license": "MIT",
   "scripts": {
     "build": "esbuild --bundle --loader:.html=copy --outdir=dist src/*",
-    "start": "esbuild --bundle --loader:.html=copy --servedir=src src/*"
+    "start": "esbuild --bundle --loader:.html=copy --outdir=dist --servedir=dist src/*"
   },
   "devDependencies": {
     "@exampledev/new.css": "^1.1.3",
