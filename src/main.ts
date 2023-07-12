@@ -14,7 +14,25 @@ async function onSubmit(e: SubmitEvent) {
   e.preventDefault();
   const data = new FormData(form);
   const alg = data.get("alg") as string;
-  const use = (data.get("use") as string) || undefined;
+  const use = {
+    ES256: "sig",
+    ES384: "sig",
+    ES512: "sig",
+    RS256: "sig",
+    RS384: "sig",
+    RS512: "sig",
+    PS256: "sig",
+    PS384: "sig",
+    PS512: "sig",
+    "ECDH-ES": "enc",
+    "ECDH-ES+A128KW": "enc",
+    "ECDH-ES+A192KW": "enc",
+    "ECDH-ES+A256KW": "enc",
+    "RSA-OAEP": "enc",
+    "RSA-OAEP-256": "enc",
+    "RSA-OAEP-384": "enc",
+    "RSA-OAEP-512": "enc",
+  }[alg];
   const { privateKey, publicKey } = await generateKeyPair(alg, {
     extractable: true,
   });
@@ -34,15 +52,12 @@ async function onSubmit(e: SubmitEvent) {
   }[data.get("kid-method") as string];
   const kid = await createKid?.();
   privateKeyOutput.textContent = JSON.stringify(
-    { ...{ alg, use, kid }, ...jwk },
+    { alg, use, kid, ...jwk },
     null,
     "  ",
   );
   publicKeyOutput.textContent = JSON.stringify(
-    {
-      ...{ alg, use, kid },
-      ...(await exportJWK(publicKey)),
-    },
+    { alg, use, kid, ...(await exportJWK(publicKey)) },
     null,
     "  ",
   );
