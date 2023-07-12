@@ -27,12 +27,14 @@ async function onSubmit(e: SubmitEvent) {
     "rfc9278-s384": () => calculateJwkThumbprintUri(jwk, "sha384"),
     "rfc9278-s512": () => calculateJwkThumbprintUri(jwk, "sha512"),
     "date-time": () => new Date().toISOString(),
+    uuid: () => crypto.randomUUID(),
+    "uuid-uri": () => `urn:uuid:${crypto.randomUUID()}`,
   }[data.get("kid-method") as string];
   const kid = await createKid?.();
   privateKeyOutput.textContent = JSON.stringify(
     { ...{ alg, use, kid }, ...jwk },
     null,
-    "  "
+    "  ",
   );
   publicKeyOutput.textContent = JSON.stringify(
     {
@@ -40,7 +42,7 @@ async function onSubmit(e: SubmitEvent) {
       ...(await exportJWK(publicKey)),
     },
     null,
-    "  "
+    "  ",
   );
 }
 
