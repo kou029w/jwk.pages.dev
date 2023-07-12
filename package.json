@@ -2,7 +2,7 @@
   "name": "jwk.pages.dev",
   "version": "0.0.0",
   "private": true,
-  "author": "Kohei Watanabe <kou029w@gmail.com>",
+  "author": "Kohei Watanabe <nebel@fogtype.com>",
   "license": "MIT",
   "scripts": {
     "build": "esbuild --bundle --loader:.html=copy --outdir=dist src/*",
