@@ -18,23 +18,23 @@
           Algorithm
           <select name="alg">
             <!-- https://www.iana.org/assignments/jose/web-signature-encryption-algorithms.csv -->
-            <option>ES256</option>
-            <option>ES384</option>
-            <option>ES512</option>
-            <option>RS256</option>
-            <option>RS384</option>
-            <option>RS512</option>
-            <option>PS256</option>
-            <option>PS384</option>
-            <option>PS512</option>
-            <option>RSA-OAEP</option>
-            <option>RSA-OAEP-256</option>
-            <option>RSA-OAEP-384</option>
-            <option>RSA-OAEP-512</option>
+            <option label="ES256 (ECDSA)">ES256</option>
+            <option label="ES384 (ECDSA)">ES384</option>
+            <option label="ES512 (ECDSA)">ES512</option>
+            <option label="RS256 (RSASSA-PKCS1-v1_5)">RS256</option>
+            <option label="RS384 (RSASSA-PKCS1-v1_5)">RS384</option>
+            <option label="RS512 (RSASSA-PKCS1-v1_5)">RS512</option>
+            <option label="PS256 (RSASSA-PSS)">PS256</option>
+            <option label="PS384 (RSASSA-PSS)">PS384</option>
+            <option label="PS512 (RSASSA-PSS)">PS512</option>
             <option>ECDH-ES</option>
             <option>ECDH-ES+A128KW</option>
             <option>ECDH-ES+A192KW</option>
             <option>ECDH-ES+A256KW</option>
+            <option>RSA-OAEP</option>
+            <option>RSA-OAEP-256</option>
+            <option>RSA-OAEP-384</option>
+            <option>RSA-OAEP-512</option>
           </select>
         </label>
         <label style="display: block">
@@ -60,16 +60,17 @@
             <option value="">-</option>
           </select>
         </label>
-        <input type="submit" value="Generate" style="display: block" />
+        <input
+          type="submit"
+          value="Generate"
+          aria-label="Generate"
+          style="display: block"
+        />
       </form>
-      <label>
-        Private Key
-        <pre id="private"></pre>
-      </label>
-      <label>
-        Public Key
-        <pre id="public"></pre>
-      </label>
+      <label for="private">Private Key</label>
+      <pre id="private"></pre>
+      <label for="public">Public Key</label>
+      <pre id="public"></pre>
     </main>
     <footer>
       by <a href="https://github.com/kou029w" rel="noreferrer">kou029w</a>
