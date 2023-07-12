@@ -26,9 +26,11 @@ async function onSubmit(e: SubmitEvent) {
     "rfc9278-s256": () => calculateJwkThumbprintUri(jwk, "sha256"),
     "rfc9278-s384": () => calculateJwkThumbprintUri(jwk, "sha384"),
     "rfc9278-s512": () => calculateJwkThumbprintUri(jwk, "sha512"),
-    "date-time": () => new Date().toISOString(),
     uuid: () => crypto.randomUUID(),
     "uuid-uri": () => `urn:uuid:${crypto.randomUUID()}`,
+    "unix-timestamp": () => String(Math.floor(new Date().getTime() / 1_000)),
+    "ecma-timestamp": () => String(new Date().getTime()),
+    "date-time": () => new Date().toISOString(),
   }[data.get("kid-method") as string];
   const kid = await createKid?.();
   privateKeyOutput.textContent = JSON.stringify(
