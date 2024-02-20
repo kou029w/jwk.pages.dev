@@ -67,9 +67,20 @@
         />
       </form>
       <label for="private">Private Key</label>
-      <pre id="private"></pre>
+      <textarea id="private" rows="11"></textarea>
       <label for="public">Public Key</label>
-      <pre id="public"></pre>
+      <textarea id="public" rows="10"></textarea>
+      <style>
+        textarea {
+          display: block;
+          width: 100%;
+        }
+
+        textarea#private:not(:focus) {
+          filter: blur(2rem);
+          cursor: pointer;
+        }
+      </style>
     </main>
   </body>
 </html>
