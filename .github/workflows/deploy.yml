@@ -1,0 +1,21 @@
+name: deploy
+on:
+  workflow_dispatch:
+  schedule:
+    # 3月16日土曜日 20:00 (JST) は 3月16日土曜日 11:00 (UTC)
+    # https://time.is/compare/JST/UTC
+    # https://crontab.guru/#00_11_16_03_SAT
+    - cron: 00 11 16 3 SAT
+  push:
+    branches: main
+jobs:
+  deploy:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 1
+    steps:
+      - name: Deploy
+        run: curl -sSf -X POST "${DEPLOY_WEBHOOK_URL}"
+        env:
+          # https://developers.cloudflare.com/pages/platform/deploy-hooks
+          DEPLOY_WEBHOOK_URL: ${{ secrets.DEPLOY_WEBHOOK_URL }}
