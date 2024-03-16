@@ -20,6 +20,7 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
       - name: Run tests
+        shell: bash
         run: BASE_URL="https://$(echo "${HEAD_REF}" | sed s/[^_0-9a-z]/-/gi).jwk.pages.dev/" npm test
         env:
           HEAD_REF: ${{ github.head_ref }}
