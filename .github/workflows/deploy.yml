@@ -2,10 +2,10 @@ name: deploy
 on:
   workflow_dispatch:
   schedule:
-    # 3月16日土曜日 20:00 (JST) は 3月16日土曜日 11:00 (UTC)
+    # 土曜日 21:00 (JST) は 土曜日 12:00 (UTC)
     # https://time.is/compare/JST/UTC
-    # https://crontab.guru/#00_11_16_03_SAT
-    - cron: 00 11 16 3 SAT
+    # https://crontab.guru/#00_12_*_*_SAT
+    - cron: 00 12 * * SAT
   push:
     branches: main
 jobs:
