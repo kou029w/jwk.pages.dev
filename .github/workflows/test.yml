@@ -26,7 +26,7 @@ jobs:
       - if: github.ref_name != github.event.repository.default_branch
         id: set_preview_env
         shell: bash
-        run: echo url="https://$(echo "${HEAD_REF}" | sed s/[^_0-9a-z]/-/gi).jwk.pages.dev/" >> "${GITHUB_OUTPUT}"
+        run: echo url="https://$(echo "${HEAD_REF:0:28}" | sed s/[^_0-9a-z]/-/gi).jwk.pages.dev/" >> "${GITHUB_OUTPUT}"
         env:
           HEAD_REF: ${{ github.head_ref }}
       - name: Run tests on ${{ env.BASE_URL }}
