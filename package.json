@@ -13,7 +13,7 @@
     "@exampledev/new.css": "1.1.3",
     "@playwright/test": "1.47.2",
     "@types/node": "20.16.10",
-    "esbuild": "0.24.0",
+    "esbuild": "0.24.2",
     "jose": "5.9.6"
   }
 }
