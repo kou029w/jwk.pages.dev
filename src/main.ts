@@ -18,6 +18,8 @@ async function onSubmit(e: SubmitEvent) {
     ES256: "sig",
     ES384: "sig",
     ES512: "sig",
+    EdDSA: "sig",
+    Ed25519: "sig",
     RS256: "sig",
     RS384: "sig",
     RS512: "sig",

@@ -5,6 +5,8 @@ const properties = {
   "ECDSA (ES256)":              ["alg", "use", "kid", "kty", "crv", "x", "y", "d"],
   "ECDSA (ES384)":              ["alg", "use", "kid", "kty", "crv", "x", "y", "d"],
   "ECDSA (ES512)":              ["alg", "use", "kid", "kty", "crv", "x", "y", "d"],
+  "EdDSA":                      ["alg", "use", "kid", "kty", "crv", "x", "d"],
+  "Ed25519":                    ["alg", "use", "kid", "kty", "crv", "x", "d"],
   "RSASSA-PKCS1-v1_5 (RS256)":  ["alg", "use", "kid", "kty", "e", "n", "d", "p", "q", "dp", "dq", "qi"],
   "RSASSA-PKCS1-v1_5 (RS384)":  ["alg", "use", "kid", "kty", "e", "n", "d", "p", "q", "dp", "dq", "qi"],
   "RSASSA-PKCS1-v1_5 (RS512)":  ["alg", "use", "kid", "kty", "e", "n", "d", "p", "q", "dp", "dq", "qi"],
