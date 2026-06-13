@@ -15,5 +15,11 @@
     "@types/node": "25.9.3",
     "esbuild": "0.28.1",
     "jose": "6.2.3"
+  },
+  "devEngines": {
+    "runtime": {
+      "name": "node",
+      "version": "24.15.0"
+    }
   }
 }
