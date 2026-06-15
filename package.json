@@ -10,7 +10,7 @@
     "start": "esbuild --bundle --loader:.html=copy --outdir=dist --servedir=dist src/*"
   },
   "devDependencies": {
-    "@exampledev/new.css": "1.1.3",
+    "@fogtype/css": "1.0.0",
     "@playwright/test": "1.60.0",
     "@types/node": "25.9.3",
     "esbuild": "0.28.1",

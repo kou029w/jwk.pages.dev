@@ -1,4 +1,4 @@
-import "@exampledev/new.css";
+import "@fogtype/css";
 import {
   calculateJwkThumbprint,
   calculateJwkThumbprintUri,

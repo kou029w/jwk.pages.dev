@@ -10,13 +10,13 @@
   <body>
     <header>
       <h1>JSON Web Key Generator</h1>
-      <p>Generate JSON Web Key.</p>
-      <nav>
+      <p>
         <a href="https://github.com/kou029w/jwk.pages.dev" rel="noreferrer">
           GitHub
         </a>
-      </nav>
+      </p>
     </header>
+    <hr />
     <main>
       <form>
         <label style="display: block">
@@ -61,6 +61,7 @@
             <option value="">-</option>
           </select>
         </label>
+        <br />
         <input
           type="submit"
           value="Generate"
@@ -68,21 +69,29 @@
           style="display: block"
         />
       </form>
-      <label for="private">Private Key</label>
-      <textarea id="private" rows="11"></textarea>
-      <label for="public">Public Key</label>
-      <textarea id="public" rows="10"></textarea>
-      <style>
-        textarea {
-          display: block;
-          width: 100%;
-        }
-
-        textarea#private:not(:focus) {
-          filter: blur(2rem);
-          cursor: pointer;
-        }
-      </style>
+      <p>
+        <label for="private">Private Key</label>
+        <textarea id="private" rows="11"></textarea>
+        <label for="public">Public Key</label>
+        <textarea id="public" rows="10"></textarea>
+        <style>
+          textarea {
+            display: block;
+            width: 100%;
+          }
+          textarea#private:not(:focus) {
+            filter: blur(2rem);
+            cursor: pointer;
+          }
+        </style>
+      </p>
     </main>
+    <hr />
+    <footer>
+      <small>
+        <a href="https://github.com/kou029w/jwk.pages.dev">jwk.pages.dev</a>
+        - Generate JSON Web Key. MIT License.
+      </small>
+    </footer>
   </body>
 </html>
