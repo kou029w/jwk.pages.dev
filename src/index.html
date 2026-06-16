@@ -70,18 +70,32 @@
         />
       </form>
       <p>
-        <label for="private">Private Key</label>
-        <textarea id="private" rows="11"></textarea>
-        <label for="public">Public Key</label>
-        <textarea id="public" rows="10"></textarea>
+        <label>
+          Private Key
+          <textarea id="private" rows="11"></textarea>
+        </label>
+        <label>
+          Public Key
+          <textarea id="public" rows="10"></textarea>
+        </label>
         <style>
-          textarea {
+          label {
             display: block;
-            width: 100%;
-          }
-          textarea#private:not(:focus) {
-            filter: blur(2rem);
-            cursor: pointer;
+            inline-size: 100%;
+            &:has(#private):not(:focus-within) {
+              position: relative;
+              cursor: pointer;
+              &::after {
+                content: "Click to reveal";
+                position: absolute;
+                inset: 1lh 0 0;
+                display: grid;
+                place-items: center;
+                pointer-events: none;
+                color: var(--color-text-secondary);
+                background: var(--color-surface);
+              }
+            }
           }
         </style>
       </p>
