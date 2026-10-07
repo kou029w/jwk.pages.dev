@@ -7,6 +7,9 @@ const properties = {
   "ECDSA (ES512)":              ["alg", "use", "kid", "kty", "crv", "x", "y", "d"],
   "EdDSA":                      ["alg", "use", "kid", "kty", "crv", "x", "d"],
   "Ed25519":                    ["alg", "use", "kid", "kty", "crv", "x", "d"],
+  "ML-DSA-44":                  ["alg", "use", "kid", "kty", "pub", "priv"],
+  "ML-DSA-65":                  ["alg", "use", "kid", "kty", "pub", "priv"],
+  "ML-DSA-87":                  ["alg", "use", "kid", "kty", "pub", "priv"],
   "RSASSA-PKCS1-v1_5 (RS256)":  ["alg", "use", "kid", "kty", "e", "n", "d", "p", "q", "dp", "dq", "qi"],
   "RSASSA-PKCS1-v1_5 (RS384)":  ["alg", "use", "kid", "kty", "e", "n", "d", "p", "q", "dp", "dq", "qi"],
   "RSASSA-PKCS1-v1_5 (RS512)":  ["alg", "use", "kid", "kty", "e", "n", "d", "p", "q", "dp", "dq", "qi"],
@@ -27,6 +30,19 @@ const properties = {
 for (const [algorithm, expected] of Object.entries(properties)) {
   test(`${algorithm} has ${expected}`, async ({ page }) => {
     await page.goto("/");
+
+    if (algorithm.startsWith("ML-DSA-")) {
+      const supported = await page.evaluate(
+        (name) =>
+          crypto.subtle.generateKey({ name }, true, ["sign", "verify"]).then(
+            () => true,
+            () => false,
+          ),
+        algorithm,
+      );
+      test.skip(!supported, `${algorithm} is not supported`);
+    }
+
     await page.getByLabel("Algorithm").selectOption({ label: algorithm });
     await page.getByLabel("Generate").click();
 
