@@ -27,19 +27,46 @@ const properties = {
 };
 // prettier-ignore-end
 
+const MLDSA = ["ML-DSA-44", "ML-DSA-65", "ML-DSA-87"];
+
+// プラットフォーム、ブラウザーごとの非対応アルゴリズム
+// prettier-ignore
+const unsupported: Record<string, Record<string, string[]>> = {
+  linux:  { firefox: MLDSA, webkit: MLDSA },
+  darwin: { firefox: MLDSA, webkit: MLDSA },
+  win32:  { firefox: MLDSA, webkit: [...MLDSA, "EdDSA", "Ed25519"] },
+};
+// prettier-ignore-end
+
+// サポート有無の判定に使う Web Crypto API のアルゴリズム
+const webCryptoAlgorithm: Record<string, string> = {
+  EdDSA: "Ed25519",
+  Ed25519: "Ed25519",
+  "ML-DSA-44": "ML-DSA-44",
+  "ML-DSA-65": "ML-DSA-65",
+  "ML-DSA-87": "ML-DSA-87",
+};
+
 for (const [algorithm, expected] of Object.entries(properties)) {
-  test(`${algorithm} has ${expected}`, async ({ page }) => {
+  test(`${algorithm} has ${expected}`, async ({ page, browserName }) => {
     await page.goto("/");
 
-    if (algorithm.startsWith("ML-DSA-")) {
+    const name = webCryptoAlgorithm[algorithm];
+    if (name) {
       const supported = await page.evaluate(
         (name) =>
           crypto.subtle.generateKey({ name }, true, ["sign", "verify"]).then(
             () => true,
             () => false,
           ),
-        algorithm,
+        name,
       );
+      const expectedSupported =
+        !unsupported[process.platform]?.[browserName]?.includes(algorithm);
+      expect(
+        supported,
+        `${algorithm} support on ${process.platform}/${browserName}`,
+      ).toBe(expectedSupported);
       test.skip(!supported, `${algorithm} is not supported`);
     }
 
