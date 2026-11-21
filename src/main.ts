@@ -92,7 +92,7 @@ async function disableUnsupportedAlgorithms() {
         );
       if (supported) return;
       option.disabled = true;
-      option.textContent += " (unsupported)";
+      option.textContent += " - unsupported";
     }),
   );
   select.setAttribute("aria-busy", "false");

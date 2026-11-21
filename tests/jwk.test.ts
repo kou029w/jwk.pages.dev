@@ -52,10 +52,10 @@ for (const [algorithm, expected] of Object.entries(properties)) {
     const supported =
       !unsupported[process.platform]?.[browserName]?.includes(algorithm);
     const option = select.locator("option", {
-      hasText: new RegExp(`^${escapeRegExp(algorithm)}( \\(unsupported\\))?$`),
+      hasText: new RegExp(`^${escapeRegExp(algorithm)}( - unsupported)?$`),
     });
     if (!supported) {
-      await expect(option).toHaveText(`${algorithm} (unsupported)`);
+      await expect(option).toHaveText(`${algorithm} - unsupported`);
       await expect(option).toHaveJSProperty("disabled", true);
       test.skip(true, `${algorithm} is not supported`);
     }
