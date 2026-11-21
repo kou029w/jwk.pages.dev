@@ -77,25 +77,30 @@ const webCryptoAlgorithm: Record<string, string> = {
   "ML-DSA-87": "ML-DSA-87",
 };
 
+async function isSupported(name: string) {
+  try {
+    await crypto.subtle.generateKey({ name }, false, ["sign", "verify"]);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 async function disableUnsupportedAlgorithms() {
   const select = form.elements.namedItem("alg") as HTMLSelectElement;
   select.setAttribute("aria-busy", "true");
-  await Promise.all(
-    Array.from(select.options).map(async (option) => {
-      const name = webCryptoAlgorithm[option.value];
-      if (!name) return;
-      const supported = await crypto.subtle
-        .generateKey({ name }, false, ["sign", "verify"])
-        .then(
-          () => true,
-          () => false,
-        );
-      if (supported) return;
-      option.disabled = true;
-      option.textContent += " - unsupported";
-    }),
-  );
-  select.setAttribute("aria-busy", "false");
+  try {
+    await Promise.all(
+      Array.from(select.options).map(async (option) => {
+        const name = webCryptoAlgorithm[option.value];
+        if (!name || (await isSupported(name))) return;
+        option.disabled = true;
+        option.textContent += " - unsupported";
+      }),
+    );
+  } finally {
+    select.setAttribute("aria-busy", "false");
+  }
 }
 
 form?.addEventListener("submit", onSubmit);
