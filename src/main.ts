@@ -20,6 +20,9 @@ async function onSubmit(e: SubmitEvent) {
     ES512: "sig",
     EdDSA: "sig",
     Ed25519: "sig",
+    "ML-DSA-44": "sig",
+    "ML-DSA-65": "sig",
+    "ML-DSA-87": "sig",
     RS256: "sig",
     RS384: "sig",
     RS512: "sig",
@@ -65,4 +68,39 @@ async function onSubmit(e: SubmitEvent) {
   );
 }
 
+const webCryptoAlgorithm: Record<string, string> = {
+  EdDSA: "Ed25519",
+  Ed25519: "Ed25519",
+  "ML-DSA-44": "ML-DSA-44",
+  "ML-DSA-65": "ML-DSA-65",
+  "ML-DSA-87": "ML-DSA-87",
+};
+
+async function isSupported(name: string) {
+  try {
+    await crypto.subtle.generateKey({ name }, false, ["sign", "verify"]);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+async function disableUnsupportedAlgorithms() {
+  const select = form.elements.namedItem("alg") as HTMLSelectElement;
+  select.setAttribute("aria-busy", "true");
+  try {
+    await Promise.all(
+      Array.from(select.options).map(async (option) => {
+        const name = webCryptoAlgorithm[option.value];
+        if (!name || (await isSupported(name))) return;
+        option.disabled = true;
+        option.textContent += " - unsupported";
+      }),
+    );
+  } finally {
+    select.setAttribute("aria-busy", "false");
+  }
+}
+
 form?.addEventListener("submit", onSubmit);
+disableUnsupportedAlgorithms();

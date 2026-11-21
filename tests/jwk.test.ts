@@ -7,6 +7,9 @@ const properties = {
   "ECDSA (ES512)":              ["alg", "use", "kid", "kty", "crv", "x", "y", "d"],
   "EdDSA":                      ["alg", "use", "kid", "kty", "crv", "x", "d"],
   "Ed25519":                    ["alg", "use", "kid", "kty", "crv", "x", "d"],
+  "ML-DSA-44":                  ["alg", "use", "kid", "kty", "pub", "priv"],
+  "ML-DSA-65":                  ["alg", "use", "kid", "kty", "pub", "priv"],
+  "ML-DSA-87":                  ["alg", "use", "kid", "kty", "pub", "priv"],
   "RSASSA-PKCS1-v1_5 (RS256)":  ["alg", "use", "kid", "kty", "e", "n", "d", "p", "q", "dp", "dq", "qi"],
   "RSASSA-PKCS1-v1_5 (RS384)":  ["alg", "use", "kid", "kty", "e", "n", "d", "p", "q", "dp", "dq", "qi"],
   "RSASSA-PKCS1-v1_5 (RS512)":  ["alg", "use", "kid", "kty", "e", "n", "d", "p", "q", "dp", "dq", "qi"],
@@ -24,10 +27,42 @@ const properties = {
 };
 // prettier-ignore-end
 
+const MLDSA = ["ML-DSA-44", "ML-DSA-65", "ML-DSA-87"];
+
+// プラットフォーム、ブラウザーごとの非対応アルゴリズム
+// prettier-ignore
+const unsupported: Record<string, Record<string, string[]>> = {
+  linux:  { firefox: MLDSA, webkit: MLDSA },
+  darwin: { firefox: MLDSA, webkit: MLDSA },
+  win32:  { firefox: MLDSA, webkit: [...MLDSA, "EdDSA", "Ed25519"] },
+};
+// prettier-ignore-end
+
+function escapeRegExp(value: string) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
 for (const [algorithm, expected] of Object.entries(properties)) {
-  test(`${algorithm} has ${expected}`, async ({ page }) => {
+  test(`${algorithm} has ${expected}`, async ({ page, browserName }) => {
     await page.goto("/");
-    await page.getByLabel("Algorithm").selectOption({ label: algorithm });
+
+    const select = page.getByLabel("Algorithm");
+    await expect(select).toHaveAttribute("aria-busy", "false");
+
+    const supported =
+      !unsupported[process.platform]?.[browserName]?.includes(algorithm);
+    const option = select.locator("option", {
+      hasText: new RegExp(`^${escapeRegExp(algorithm)}( - unsupported)?$`),
+    });
+    if (!supported) {
+      await expect(option).toHaveText(`${algorithm} - unsupported`);
+      await expect(option).toHaveJSProperty("disabled", true);
+      test.skip(true, `${algorithm} is not supported`);
+    }
+    await expect(option).toHaveText(algorithm);
+    await expect(option).toHaveJSProperty("disabled", false);
+
+    await select.selectOption({ label: algorithm });
     await page.getByLabel("Generate").click();
 
     const jwk = await page
