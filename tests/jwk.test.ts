@@ -38,39 +38,31 @@ const unsupported: Record<string, Record<string, string[]>> = {
 };
 // prettier-ignore-end
 
-// サポート有無の判定に使う Web Crypto API のアルゴリズム
-const webCryptoAlgorithm: Record<string, string> = {
-  EdDSA: "Ed25519",
-  Ed25519: "Ed25519",
-  "ML-DSA-44": "ML-DSA-44",
-  "ML-DSA-65": "ML-DSA-65",
-  "ML-DSA-87": "ML-DSA-87",
-};
+function escapeRegExp(value: string) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
 
 for (const [algorithm, expected] of Object.entries(properties)) {
   test(`${algorithm} has ${expected}`, async ({ page, browserName }) => {
     await page.goto("/");
 
-    const name = webCryptoAlgorithm[algorithm];
-    if (name) {
-      const supported = await page.evaluate(
-        (name) =>
-          crypto.subtle.generateKey({ name }, true, ["sign", "verify"]).then(
-            () => true,
-            () => false,
-          ),
-        name,
-      );
-      const expectedSupported =
-        !unsupported[process.platform]?.[browserName]?.includes(algorithm);
-      expect(
-        supported,
-        `${algorithm} support on ${process.platform}/${browserName}`,
-      ).toBe(expectedSupported);
-      test.skip(!supported, `${algorithm} is not supported`);
-    }
+    const select = page.getByLabel("Algorithm");
+    await expect(select).toHaveAttribute("aria-busy", "false");
 
-    await page.getByLabel("Algorithm").selectOption({ label: algorithm });
+    const supported =
+      !unsupported[process.platform]?.[browserName]?.includes(algorithm);
+    const option = select.locator("option", {
+      hasText: new RegExp(`^${escapeRegExp(algorithm)}( \\(unsupported\\))?$`),
+    });
+    if (!supported) {
+      await expect(option).toHaveText(`${algorithm} (unsupported)`);
+      await expect(option).toHaveJSProperty("disabled", true);
+      test.skip(true, `${algorithm} is not supported`);
+    }
+    await expect(option).toHaveText(algorithm);
+    await expect(option).toHaveJSProperty("disabled", false);
+
+    await select.selectOption({ label: algorithm });
     await page.getByLabel("Generate").click();
 
     const jwk = await page
