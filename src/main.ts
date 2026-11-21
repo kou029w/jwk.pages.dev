@@ -68,7 +68,6 @@ async function onSubmit(e: SubmitEvent) {
   );
 }
 
-// ブラウザーによって対応していないアルゴリズムの Web Crypto API での名前
 const webCryptoAlgorithm: Record<string, string> = {
   EdDSA: "Ed25519",
   Ed25519: "Ed25519",
